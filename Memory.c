@@ -2,7 +2,7 @@
 #include "Basic.h"
 #include <assert.h>
 
-#define TEMP_SIZE (MB(10))
+#define TEMP_SIZE (GB(1))
 
 typedef struct
 {

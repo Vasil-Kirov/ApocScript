@@ -6,12 +6,14 @@
 #include "Parser.h"
 #include "Analyzer.h"
 #include "Error.h"
+#include "Bytecode.h"
 
 #include "Lexer.c"
 #include "Memory.c"
 #include "Parser.c"
 #include "Analyzer.c"
 #include "Error.c"
+#include "Bytecode.c"
 
 #define STB_DS_IMPLEMENTATION
 #include "stb_ds.h"
@@ -29,6 +31,7 @@ int main()
 	init_memory();
 	init_lexer();
 	init_analyzer();
+	init_bytecode();
 	char *line = VAlloc(MB(10));
 	while(true)
 	{
@@ -41,6 +44,7 @@ int main()
 		Node *tree = parse_tokens(tokens);
 		analyze_ast(tree);
 
+		free_temp_analyzer();
 		reset_temporary_memory();
 		ArrFree(tokens);
 	}

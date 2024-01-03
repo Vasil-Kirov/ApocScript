@@ -9,7 +9,6 @@ typedef enum
 {
 	INVALID,
 	T_INT,
-	T_UINT,
 	T_FLOAT,
 	T_STRUCT,
 	T_STRING,
@@ -64,6 +63,7 @@ typedef struct
 } Type_Table;
 
 void analyze_ast(Node *root);
+void free_temp_analyzer();
 const Type_Info *analyze_expression(Node *expressions);
 const Type_Info *analyze_next_expression(Expr_Arr *exprs);
 

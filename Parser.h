@@ -6,7 +6,7 @@
 
 typedef enum
 {
-	LIT_UINT,
+	LIT_INVALID,
 	LIT_INT,
 	LIT_DOUBLE,
 	LIT_CHAR
@@ -56,7 +56,6 @@ typedef struct _ast_node
 			union
 			{
 				u64 _i64;
-				i64 _u64;
 				f64 _f64;
 			};
 			Literal_Type type;
@@ -87,6 +86,8 @@ typedef struct _ast_node
 			Node **arguments;
 		} fn_call;
 	};
+
+	const struct _Type_Info *type_info; // added by analyzer
 } _ast_node;
 
 typedef struct

@@ -114,14 +114,14 @@ void init_analyzer()
 	create_basic_type("i16", T_INT,   16);
 	create_basic_type("i32", T_INT,   32);
 	create_basic_type("i64", T_INT,   64);
-	create_basic_type("u8",  T_UINT,  8);
-	create_basic_type("u16", T_UINT,  16);
-	create_basic_type("u32", T_UINT,  32);
-	create_basic_type("u64", T_UINT,  64);
 	create_basic_type("f32", T_FLOAT, 32);
 	create_basic_type("f64", T_FLOAT, 64);
 	create_basic_type("b32", T_BOOL,  32);
 	create_basic_type("string", T_STRING, 0);
+}
+
+void free_temp_analyzer()
+{
 }
 
 void analyze_ast(Node *root)
@@ -182,7 +182,7 @@ void type_is_boolean(const Type_Info *type, Token *token)
 void type_is_arithmetic(const Type_Info *type, Token *token)
 {
 	Type_Type t = type->type;
-	if(t == T_INT || t == T_UINT || t == T_FLOAT || t == T_BOOL)
+	if(t == T_INT || t == T_FLOAT || t == T_BOOL)
 		return;
 	report_error(token, "Trying to perform a binary expression with non arithmetic type");
 }
@@ -195,12 +195,11 @@ const Type_Info *get_literal_type(Node *literal)
 		return get_type("i8");
 		case LIT_DOUBLE:
 		return get_type("f64");
-		case LIT_UINT:
-		return get_type("u64");
 		case LIT_INT:
 		return get_type("i64");
+		default:
+		assert(false);
 	}
-	assert(false);
 	return NULL;
 }
 
@@ -285,7 +284,7 @@ const Type_Info *analyze_expression(Node *expr)
 			type_is_arithmetic(left, expr->token);
 			type_is_arithmetic(right, expr->token);
 			types_must_match(left, right, expr->token);
-			return left;
+			result = left;
 		} break;
 		case ND_IF:
 		{
@@ -301,6 +300,8 @@ const Type_Info *analyze_expression(Node *expr)
 			report_error(expr->token, "Unexpected token");
 		} break;
 	}
+
+	expr->type_info = result;
 	return result;
 }
 
